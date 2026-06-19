@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureWeb | Seguridad en Línea</title>
+    <!-- Bootstrap CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <h1>🔒 SecureWeb: Entendiendo HTTP y HTTPS</h1>
+            <p class="lead">Seguridad y confianza en la web para todos</p>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">SecureWeb</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicios">Servicios / Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row">
+            <main class="col-lg-8">
+                <!-- Sección Inicio -->
+                <section id="inicio" class="p-4 mb-4 bg-light rounded shadow-sm">
+                    <h2 class="mb-3">Bienvenido a SecureWeb</h2>
+                    <p>En la era digital, la seguridad de tus datos es primordial. Este sitio educativo te explica de forma sencilla la diferencia entre HTTP y HTTPS, por qué el cifrado es vital y cómo proteger tu información mientras navegas. Aprende con nosotros a identificar conexiones seguras y a construir un Internet más confiable.</p>
+                    <p class="fw-bold">🔐 Dato clave: Hoy en día, más del 90% de las páginas web usan HTTPS por defecto. ¿El tuyo?</p>
+                    <button class="btn btn-primary mt-3">Conoce más</button>
+                </section>
+
+                <!-- Sección Quiénes Somos -->
+                <section id="quienes-somos" class="p-4 mb-4 bg-light rounded shadow-sm">
+                    <h2 class="mb-3">¿Quiénes Somos?</h2>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p><strong>SecureWeb</strong> nace como un proyecto académico de la carrera de Ingeniería en Tecnologías de la Información, con el objetivo de concienciar sobre la importancia de los protocolos seguros en la web. Somos un equipo de estudiantes y futuros desarrolladores apasionados por la ciberseguridad y el desarrollo web responsable. Entendemos que, muchas veces, los usuarios no conocen los riesgos de conectarse a redes WiFi públicas o de ingresar datos personales en sitios sin candado. Por eso, creamos este espacio informativo donde explicamos con ejemplos cotidianos qué es HTTP, cómo HTTPS protege tus contraseñas, fotos y números de tarjeta, y por qué cada sitio web debería implementar un certificado SSL/TLS. Nuestra misión es fomentar una cultura de seguridad digital desde la base: enseñando a futuros desarrolladores y a usuarios comunes a identificar amenazas y a adoptar buenas prácticas. Creemos firmemente que la confianza en línea se construye con transparencia, educación y el uso de herramientas como Let's Encrypt, que hoy facilitan el acceso a HTTPS gratuito. </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=600" class="img-fluid rounded mt-3" alt="Concepto de seguridad en internet: candado y código binario">
+                            <p class="text-muted mt-2"><em>Ilustración: El candado en la barra de direcciones simboliza una conexión segura mediante HTTPS.</em></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección Servicios / Productos -->
+                <section id="servicios" class="p-4 mb-4 bg-light rounded shadow-sm">
+                    <h2 class="mb-3">Nuestros Servicios / Productos</h2>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://via.placeholder.com/300x200/007bff/ffffff?text=Auditor%C3%ADa+Web" class="card-img-top" alt="Auditoría de Seguridad Web">
+                                <div class="card-body">
+                                    <h5 class="card-title">Auditoría de Seguridad Web</h5>
+                                    <p class="card-text">Análisis exhaustivo de vulnerabilidades en tu sitio web para garantizar la máxima protección.</p>
+                                    <a href="#" class="btn btn-primary">Más Información</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://via.placeholder.com/300x200/28a745/ffffff?text=Certificados+SSL" class="card-img-top" alt="Instalación de Certificados SSL">
+                                <div class="card-body">
+                                    <h5 class="card-title">Instalación de Certificados SSL</h5>
+                                    <p class="card-text">Implementación y configuración de certificados HTTPS para cifrar la comunicación de tu sitio.</p>
+                                    <a href="#" class="btn btn-primary">Más Información</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="https://via.placeholder.com/300x200/ffc107/212529?text=Consultor%C3%ADa" class="card-img-top" alt="Consultoría en Ciberseguridad">
+                                <div class="card-body">
+                                    <h5 class="card-title">Consultoría en Ciberseguridad</h5>
+                                    <p class="card-text">Asesoramiento personalizado para mejorar las prácticas de seguridad digital en tu organización.</p>
+                                    <a href="#" class="btn btn-primary">Más Información</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección Contacto -->
+                <section id="contacto" class="p-4 mb-4 bg-light rounded shadow-sm">
+                    <h2 class="mb-3">Contáctanos</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" placeholder="Tu nombre completo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" placeholder="tu.correo@ejemplo.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="asunto" class="form-label">Asunto</label>
+                            <input type="text" class="form-control" id="asunto" placeholder="Asunto del mensaje">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mensaje" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="mensaje" rows="5" placeholder="Escribe tu mensaje aquí"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar Mensaje</button>
+                    </form>
+                    <div class="mt-4 text-center">
+                        <p>También puedes encontrarnos en:</p>
+                        <a href="mailto:info@secureweb.com" class="btn btn-info mx-2"><i class="bi bi-envelope"></i> Correo</a>
+                        <a href="https://twitter.com/secureweb" target="_blank" class="btn btn-info mx-2"><i class="bi bi-twitter"></i> Twitter</a>
+                        <a href="https://facebook.com/secureweb" target="_blank" class="btn btn-info mx-2"><i class="bi bi-facebook"></i> Facebook</a>
+                        <a href="https://www.google.com/maps/search/secureweb" target="_blank" class="btn btn-info mx-2"><i class="bi bi-geo-alt"></i> Ubicación</a>
+                    </div>
+                </section>
+
+            </main>
+
+            <aside class="col-lg-4">
+                <div class="p-4 mb-4 bg-warning bg-opacity-10 rounded shadow-sm">
+                    <h3>📢 Información adicional</h3>
+                    <p><strong>Horarios de atención:</strong><br>
+                    Lunes a Viernes: 9:00 - 18:00<br>
+                    Sábados: 9:00 - 13:00</p>
+                    <p><strong>🔥 Promoción del mes:</strong><br>
+                    Auditoría básica de seguridad GRATIS para los primeros 10 sitios web que nos contacten. ¡Asegura tu página ahora!</p>
+                    <p><strong>Dato curioso:</strong><br>
+                    El primer navegador en marcar los sitios HTTP como "No seguro" fue Google Chrome en 2018. Desde entonces, el uso de HTTPS ha crecido más del 70%.</p>
+                    <p><strong>¿Sabías que...?</strong><br>
+                    HTTPS no solo cifra los datos, también autentica la identidad del servidor. Así evitas ser víctima de suplantación (phishing).</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        <p>Desarrollado por: <strong>MINAYA GARCIA JEFFERSON CRISTOPHER</strong></p>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <!-- Bootstrap Icons (optional, for social media icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</body>
+</html>
