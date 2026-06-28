@@ -63,3 +63,14 @@ h2 {
         font-size: 0.95rem;
     }
 }
+/* Estilos para la sección de gestión */
+#gestion .card {
+    transition: transform 0.2s;
+}
+#gestion .card:hover {
+    transform: scale(1.02);
+}
+#mensajeValidacion .alert {
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+}

@@ -97,3 +97,15 @@ Esta media query ajusta el tamaño de la fuente de la marca del navbar, el paddi
 ## Verificación
 
 El sitio web ha sido diseñado para visualizarse correctamente en diferentes tamaños de pantalla (computadora, tablet y celular) gracias a la implementación de Bootstrap y la media query personalizada.
+
+## Avance Semana 5: Funcionalidad Dinámica con JavaScript
+
+Se ha incorporado una sección **"Gestión de Servicios"** que permite:
+
+- Registrar nuevos servicios mediante un formulario (nombre, descripción, categoría).
+- Validar que todos los campos estén completos, mostrando mensajes de error.
+- Mostrar los servicios registrados en tarjetas estilizadas con Bootstrap.
+- Eliminar servicios individualmente o todos a la vez.
+- Actualizar automáticamente el contador de servicios.
+
+La lógica está implementada en `script.js` utilizando manipulación del DOM, eventos, y clases de Bootstrap para los elementos creados dinámicamente.
