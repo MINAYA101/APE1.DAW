@@ -63,6 +63,7 @@ h2 {
         font-size: 0.95rem;
     }
 }
+
 /* Estilos para la sección de gestión */
 #gestion .card {
     transition: transform 0.2s;

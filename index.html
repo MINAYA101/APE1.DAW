@@ -100,24 +100,39 @@
                     </div>
                 </section>
 
-                <!-- NUEVA SECCIÓN: Gestión de Servicios (Dinámica con JavaScript) -->
+                <!-- SECCIÓN GESTIÓN DE SERVICIOS (mejorada con validaciones dinámicas) -->
                 <section id="gestion" class="p-4 mb-4 bg-light rounded shadow-sm">
                     <h2 class="mb-3"><i class="bi bi-plus-circle"></i> Gestión de Servicios</h2>
-                    <p>Registra nuevos servicios que ofreces. Todos los campos son obligatorios.</p>
+                    <p>Registra nuevos servicios. Todos los campos son obligatorios y deben cumplir con los requisitos.</p>
 
-                    <!-- Formulario para añadir servicio -->
-                    <form id="formServicio" class="mb-4">
+                    <!-- Formulario mejorado con validaciones -->
+                    <form id="formServicio" class="mb-4" novalidate>
                         <div class="row g-3">
+                            <!-- Campo Nombre -->
                             <div class="col-md-4">
-                                <label for="nombreServicio" class="form-label">Nombre del servicio</label>
-                                <input type="text" class="form-control" id="nombreServicio" placeholder="Ej. Auditoría avanzada" required>
+                                <label for="nombreServicio" class="form-label">Nombre del servicio *</label>
+                                <input type="text" class="form-control" id="nombreServicio" placeholder="Ej. Auditoría avanzada" required minlength="3">
+                                <div class="invalid-feedback">
+                                    El nombre debe tener al menos 3 caracteres.
+                                </div>
+                                <div class="valid-feedback">
+                                    ¡Nombre válido!
+                                </div>
                             </div>
+                            <!-- Campo Descripción -->
                             <div class="col-md-4">
-                                <label for="descripcionServicio" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="descripcionServicio" placeholder="Breve descripción" required>
+                                <label for="descripcionServicio" class="form-label">Descripción *</label>
+                                <input type="text" class="form-control" id="descripcionServicio" placeholder="Breve descripción" required minlength="10">
+                                <div class="invalid-feedback">
+                                    La descripción debe tener al menos 10 caracteres.
+                                </div>
+                                <div class="valid-feedback">
+                                    Descripción correcta.
+                                </div>
                             </div>
+                            <!-- Campo Categoría -->
                             <div class="col-md-3">
-                                <label for="categoriaServicio" class="form-label">Categoría</label>
+                                <label for="categoriaServicio" class="form-label">Categoría *</label>
                                 <select class="form-select" id="categoriaServicio" required>
                                     <option value="">Seleccionar...</option>
                                     <option value="Seguridad">Seguridad</option>
@@ -125,12 +140,18 @@
                                     <option value="Capacitación">Capacitación</option>
                                     <option value="Herramientas">Herramientas</option>
                                 </select>
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona una categoría.
+                                </div>
+                                <div class="valid-feedback">
+                                    Categoría seleccionada.
+                                </div>
                             </div>
                             <div class="col-md-1 d-flex align-items-end">
-                                <button type="submit" class="btn btn-success w-100">Añadir</button>
+                                <button type="submit" class="btn btn-success w-100" id="btnAñadir">Añadir</button>
                             </div>
                         </div>
-                        <!-- Mensaje de validación dinámico -->
+                        <!-- Mensaje de validación general (para errores de formulario) -->
                         <div id="mensajeValidacion" class="mt-3"></div>
                     </form>
 
@@ -140,7 +161,6 @@
                         <button id="btnEliminarTodos" class="btn btn-outline-danger btn-sm">Eliminar todos</button>
                     </div>
                     <div id="listaServicios" class="row mt-3">
-                        <!-- Aquí se insertarán dinámicamente las tarjetas de servicios -->
                         <p class="text-muted" id="mensajeVacio">Aún no hay servicios registrados.</p>
                     </div>
                 </section>
@@ -172,11 +192,11 @@
 
             <aside class="col-lg-4">
                 <div class="p-4 mb-4 bg-warning bg-opacity-10 rounded shadow-sm">
-                    <h3>📢 Información adicional</h3>
+                    <h3>Información adicional</h3>
                     <p><strong>Horarios de atención:</strong><br>
                     Lunes a Viernes: 9:00 - 18:00<br>
                     Sábados: 9:00 - 13:00</p>
-                    <p><strong>🔥 Promoción del mes:</strong><br>
+                    <p><strong>Promoción del mes:</strong><br>
                     Auditoría básica de seguridad GRATIS para los primeros 10 sitios web que nos contacten. ¡Asegura tu página ahora!</p>
                     <p><strong>Dato curioso:</strong><br>
                     El primer navegador en marcar los sitios HTTP como "No seguro" fue Google Chrome en 2018. Desde entonces, el uso de HTTPS ha crecido más del 70%.</p>

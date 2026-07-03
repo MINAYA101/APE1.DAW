@@ -1,7 +1,7 @@
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Elementos del formulario y la lista
+    // ===== Elementos del formulario y la lista =====
     const form = document.getElementById('formServicio');
     const nombreInput = document.getElementById('nombreServicio');
     const descripcionInput = document.getElementById('descripcionServicio');
@@ -11,59 +11,108 @@ document.addEventListener('DOMContentLoaded', function() {
     const mensajeVacio = document.getElementById('mensajeVacio');
     const mensajeValidacion = document.getElementById('mensajeValidacion');
     const btnEliminarTodos = document.getElementById('btnEliminarTodos');
+    const btnAñadir = document.getElementById('btnAñadir');
 
-    // Arreglo para almacenar los servicios (opcional, pero útil)
+    // Arreglo para almacenar los servicios
     let servicios = [];
 
-    // Función para actualizar el contador y el mensaje de vacío
+    // ===== Funciones de validación individuales =====
+    function validarNombre() {
+        const nombre = nombreInput.value.trim();
+        const valido = nombre.length >= 3;
+        if (valido) {
+            nombreInput.classList.remove('is-invalid');
+            nombreInput.classList.add('is-valid');
+        } else {
+            nombreInput.classList.remove('is-valid');
+            nombreInput.classList.add('is-invalid');
+        }
+        return valido;
+    }
+
+    function validarDescripcion() {
+        const desc = descripcionInput.value.trim();
+        const valido = desc.length >= 10;
+        if (valido) {
+            descripcionInput.classList.remove('is-invalid');
+            descripcionInput.classList.add('is-valid');
+        } else {
+            descripcionInput.classList.remove('is-valid');
+            descripcionInput.classList.add('is-invalid');
+        }
+        return valido;
+    }
+
+    function validarCategoria() {
+        const categoria = categoriaSelect.value;
+        const valido = categoria !== '';
+        if (valido) {
+            categoriaSelect.classList.remove('is-invalid');
+            categoriaSelect.classList.add('is-valid');
+        } else {
+            categoriaSelect.classList.remove('is-valid');
+            categoriaSelect.classList.add('is-invalid');
+        }
+        return valido;
+    }
+
+    // Validación global (para habilitar/deshabilitar botón)
+    function validarFormularioCompleto() {
+        const nombreOk = validarNombre();
+        const descOk = validarDescripcion();
+        const catOk = validarCategoria();
+        const todoOk = nombreOk && descOk && catOk;
+        btnAñadir.disabled = !todoOk;
+        return todoOk;
+    }
+
+    // ===== Eventos en tiempo real =====
+    nombreInput.addEventListener('input', function() {
+        validarNombre();
+        validarFormularioCompleto();
+        // Ocultar mensaje general cuando el campo se corrige
+        mensajeValidacion.innerHTML = '';
+    });
+    nombreInput.addEventListener('blur', validarNombre);
+
+    descripcionInput.addEventListener('input', function() {
+        validarDescripcion();
+        validarFormularioCompleto();
+        mensajeValidacion.innerHTML = '';
+    });
+    descripcionInput.addEventListener('blur', validarDescripcion);
+
+    categoriaSelect.addEventListener('change', function() {
+        validarCategoria();
+        validarFormularioCompleto();
+        mensajeValidacion.innerHTML = '';
+    });
+    categoriaSelect.addEventListener('blur', validarCategoria);
+
+    // ===== Funciones para manejar los servicios =====
     function actualizarContador() {
         const total = servicios.length;
         contadorSpan.textContent = total;
-
-        // Mostrar u ocultar el mensaje de "sin servicios"
         if (total === 0) {
-            if (!mensajeVacio) {
-                // Si no existe, lo creamos (pero ya existe en el HTML)
-                const p = document.createElement('p');
-                p.className = 'text-muted';
-                p.id = 'mensajeVacio';
-                p.textContent = 'Aún no hay servicios registrados.';
-                listaServicios.appendChild(p);
-            } else {
-                mensajeVacio.style.display = 'block';
-            }
+            if (mensajeVacio) mensajeVacio.style.display = 'block';
         } else {
-            if (mensajeVacio) {
-                mensajeVacio.style.display = 'none';
-            }
+            if (mensajeVacio) mensajeVacio.style.display = 'none';
         }
     }
 
-    // Función para renderizar todos los servicios desde el arreglo
     function renderizarServicios() {
-        // Limpiar la lista (pero conservar el mensaje de vacío si existe)
+        // Eliminar tarjetas existentes (pero no el mensaje de vacío)
         const items = listaServicios.querySelectorAll('.col-md-6.col-lg-4');
         items.forEach(item => item.remove());
 
-        // Si no hay servicios, mostramos el mensaje
         if (servicios.length === 0) {
-            if (!mensajeVacio) {
-                const p = document.createElement('p');
-                p.className = 'text-muted';
-                p.id = 'mensajeVacio';
-                p.textContent = 'Aún no hay servicios registrados.';
-                listaServicios.appendChild(p);
-            } else {
-                mensajeVacio.style.display = 'block';
-            }
+            if (mensajeVacio) mensajeVacio.style.display = 'block';
             actualizarContador();
             return;
         }
 
-        // Ocultar mensaje de vacío
         if (mensajeVacio) mensajeVacio.style.display = 'none';
 
-        // Crear una tarjeta para cada servicio
         servicios.forEach((servicio, index) => {
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 mb-4';
@@ -71,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const card = document.createElement('div');
             card.className = 'card h-100 shadow-sm';
 
-            // Cuerpo de la tarjeta
             const cardBody = document.createElement('div');
             cardBody.className = 'card-body';
 
@@ -87,17 +135,14 @@ document.addEventListener('DOMContentLoaded', function() {
             categoria.className = 'badge bg-secondary me-2';
             categoria.textContent = servicio.categoria;
 
-            // Botón eliminar
             const btnEliminar = document.createElement('button');
             btnEliminar.className = 'btn btn-danger btn-sm mt-2';
             btnEliminar.textContent = 'Eliminar';
-            // Asignamos el evento click con el índice
             btnEliminar.addEventListener('click', function(e) {
                 e.stopPropagation();
                 eliminarServicio(index);
             });
 
-            // Ensamblar
             cardBody.appendChild(title);
             cardBody.appendChild(desc);
             cardBody.appendChild(categoria);
@@ -111,78 +156,69 @@ document.addEventListener('DOMContentLoaded', function() {
         actualizarContador();
     }
 
-    // Función para agregar un servicio
     function agregarServicio(nombre, descripcion, categoria) {
-        const nuevoServicio = {
-            nombre: nombre,
-            descripcion: descripcion,
-            categoria: categoria
-        };
-        servicios.push(nuevoServicio);
+        servicios.push({ nombre, descripcion, categoria });
         renderizarServicios();
     }
 
-    // Función para eliminar un servicio por índice
     function eliminarServicio(index) {
         servicios.splice(index, 1);
         renderizarServicios();
-        // Mostrar mensaje de validación positivo
         mensajeValidacion.innerHTML = `<div class="alert alert-info">Servicio eliminado correctamente.</div>`;
-        setTimeout(() => {
-            mensajeValidacion.innerHTML = '';
-        }, 3000);
+        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
     }
 
-    // Función para eliminar todos los servicios
     function eliminarTodos() {
         if (servicios.length === 0) {
             mensajeValidacion.innerHTML = `<div class="alert alert-warning">No hay servicios para eliminar.</div>`;
-            setTimeout(() => {
-                mensajeValidacion.innerHTML = '';
-            }, 3000);
+            setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
             return;
         }
         servicios = [];
         renderizarServicios();
         mensajeValidacion.innerHTML = `<div class="alert alert-success">Todos los servicios han sido eliminados.</div>`;
-        setTimeout(() => {
-            mensajeValidacion.innerHTML = '';
-        }, 3000);
+        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
     }
 
-    // Evento submit del formulario
+    // ===== Evento submit del formulario =====
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Evita recarga
+        e.preventDefault();
 
-        // Obtener valores y eliminar espacios en blanco
+        // Re-validar todos los campos por si acaso
+        const nombreOk = validarNombre();
+        const descOk = validarDescripcion();
+        const catOk = validarCategoria();
+        const todoOk = nombreOk && descOk && catOk;
+
+        if (!todoOk) {
+            mensajeValidacion.innerHTML = `<div class="alert alert-danger">Corrige los campos marcados en rojo antes de añadir.</div>`;
+            return;
+        }
+
         const nombre = nombreInput.value.trim();
         const descripcion = descripcionInput.value.trim();
         const categoria = categoriaSelect.value;
 
-        // Validar que no estén vacíos
-        if (nombre === '' || descripcion === '' || categoria === '') {
-            mensajeValidacion.innerHTML = `<div class="alert alert-danger">Todos los campos son obligatorios. Por favor, completa el formulario.</div>`;
-            return;
-        }
-
-        // Si todo está bien, agregar el servicio
         agregarServicio(nombre, descripcion, categoria);
 
-        // Limpiar campos del formulario
+        // Limpiar campos y quitar clases de validación
         nombreInput.value = '';
         descripcionInput.value = '';
         categoriaSelect.value = '';
+        nombreInput.classList.remove('is-valid', 'is-invalid');
+        descripcionInput.classList.remove('is-valid', 'is-invalid');
+        categoriaSelect.classList.remove('is-valid', 'is-invalid');
+        btnAñadir.disabled = true; // Deshabilitar hasta que se ingresen nuevos datos
 
-        // Mostrar mensaje de éxito
         mensajeValidacion.innerHTML = `<div class="alert alert-success">Servicio "${nombre}" añadido correctamente.</div>`;
-        setTimeout(() => {
-            mensajeValidacion.innerHTML = '';
-        }, 3000);
+        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
     });
 
-    // Evento para eliminar todos
+    // ===== Evento para eliminar todos =====
     btnEliminarTodos.addEventListener('click', eliminarTodos);
 
-    // Inicializar: asegurar que el contador esté en 0 y mensaje de vacío visible
+    // ===== Inicialización =====
+    // Deshabilitar botón al inicio
+    btnAñadir.disabled = true;
     actualizarContador();
 });
