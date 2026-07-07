@@ -109,3 +109,37 @@ Se ha incorporado una sección **"Gestión de Servicios"** que permite:
 - Actualizar automáticamente el contador de servicios.
 
 La lógica está implementada en `script.js` utilizando manipulación del DOM, eventos, y clases de Bootstrap para los elementos creados dinámicamente.
+
+# Proyecto Integrador U2 - Avance 7/16: Uso de plantillas para renderizar contenido dinámico
+
+Este proyecto corresponde a la Semana 7 de la asignatura Desarrollo de Aplicaciones Web. Se ha reorganizado la interfaz simulando una estructura de plantillas (base.html, header, nav, content, aside, footer) y se ha implementado la generación dinámica de contenido utilizando arreglos de JavaScript para representar los datos del proyecto.
+
+## Estructura del Proyecto
+
+- `index.html`: Estructura HTML5 con Bootstrap, secciones semánticas y comentarios que indican los bloques reutilizables para futura integración con Flask.
+- `style.css`: Estilos personalizados y media query para diseño responsivo.
+- `script.js`: Lógica de validación dinámica, gestión de servicios (CRUD básico) y renderizado parametrizado para mostrar los servicios en dos zonas diferentes.
+
+## Funcionalidades implementadas
+
+- **Datos iniciales** almacenados en un arreglo de objetos (tres servicios predefinidos).
+- **Renderizado dinámico** en dos secciones:
+  - **"Servicios"**: muestra las tarjetas en modo solo lectura (sin botones de eliminar).
+  - **"Gestión"**: muestra las mismas tarjetas pero con botones de eliminar, además del formulario para añadir nuevos servicios.
+- **Validaciones en tiempo real** (eventos `input`, `blur`, `change`):
+  - Nombre: obligatorio y mínimo 3 caracteres.
+  - Descripción: obligatoria y mínimo 10 caracteres.
+  - Categoría: obligatoria (selección no vacía).
+- **Retroalimentación visual** con clases de Bootstrap (`is-valid`, `is-invalid`, `valid-feedback`, `invalid-feedback`).
+- **Botón "Añadir" habilitado/deshabilitado** según la validez global del formulario.
+- **Contador** de servicios actualizado en tiempo real (incluye los iniciales).
+- **Eliminación individual y masiva** que afecta a ambas vistas.
+- **Comentarios en HTML** que identifican los bloques que podrían convertirse en plantillas de Flask (`header`, `nav`, `main content`, `aside`, `footer`).
+- **Diseño responsivo** (Bootstrap + media query) que se adapta a computadora, tablet y celular.
+
+## Tecnologías utilizadas
+
+- HTML5
+- CSS3
+- Bootstrap 5 (framework CSS)
+- JavaScript (DOM, eventos, validaciones, manipulación de arreglos)

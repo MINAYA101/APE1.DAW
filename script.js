@@ -1,20 +1,36 @@
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ===== Elementos del formulario y la lista =====
+    // ===== Elementos del DOM =====
     const form = document.getElementById('formServicio');
     const nombreInput = document.getElementById('nombreServicio');
     const descripcionInput = document.getElementById('descripcionServicio');
     const categoriaSelect = document.getElementById('categoriaServicio');
-    const listaServicios = document.getElementById('listaServicios');
+    const contenedorServicios = document.getElementById('serviciosGrid');   // Para vista de solo lectura
+    const contenedorGestion = document.getElementById('listaServicios');    // Para vista con botones
     const contadorSpan = document.getElementById('contadorServicios');
-    const mensajeVacio = document.getElementById('mensajeVacio');
     const mensajeValidacion = document.getElementById('mensajeValidacion');
     const btnEliminarTodos = document.getElementById('btnEliminarTodos');
     const btnAñadir = document.getElementById('btnAñadir');
 
-    // Arreglo para almacenar los servicios
-    let servicios = [];
+    // ===== Arreglo de servicios (incluye datos iniciales) =====
+    let servicios = [
+        {
+            nombre: 'Auditoría de Seguridad Web',
+            descripcion: 'Análisis exhaustivo de vulnerabilidades en tu sitio web para garantizar la máxima protección.',
+            categoria: 'Seguridad'
+        },
+        {
+            nombre: 'Instalación de Certificados SSL',
+            descripcion: 'Implementación y configuración de certificados HTTPS para cifrar la comunicación de tu sitio.',
+            categoria: 'Seguridad'
+        },
+        {
+            nombre: 'Consultoría en Ciberseguridad',
+            descripcion: 'Asesoramiento personalizado para mejorar las prácticas de seguridad digital en tu organización.',
+            categoria: 'Consultoría'
+        }
+    ];
 
     // ===== Funciones de validación individuales =====
     function validarNombre() {
@@ -56,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return valido;
     }
 
-    // Validación global (para habilitar/deshabilitar botón)
     function validarFormularioCompleto() {
         const nombreOk = validarNombre();
         const descOk = validarDescripcion();
@@ -70,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
     nombreInput.addEventListener('input', function() {
         validarNombre();
         validarFormularioCompleto();
-        // Ocultar mensaje general cuando el campo se corrige
         mensajeValidacion.innerHTML = '';
     });
     nombreInput.addEventListener('blur', validarNombre);
@@ -89,30 +103,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     categoriaSelect.addEventListener('blur', validarCategoria);
 
-    // ===== Funciones para manejar los servicios =====
-    function actualizarContador() {
-        const total = servicios.length;
-        contadorSpan.textContent = total;
-        if (total === 0) {
-            if (mensajeVacio) mensajeVacio.style.display = 'block';
-        } else {
-            if (mensajeVacio) mensajeVacio.style.display = 'none';
-        }
-    }
-
-    function renderizarServicios() {
-        // Eliminar tarjetas existentes (pero no el mensaje de vacío)
-        const items = listaServicios.querySelectorAll('.col-md-6.col-lg-4');
-        items.forEach(item => item.remove());
+    // ===== Renderizado de servicios (parametrizado) =====
+    function renderizarServicios(contenedor, mostrarBotones = false) {
+        // Limpiar el contenedor
+        contenedor.innerHTML = '';
 
         if (servicios.length === 0) {
-            if (mensajeVacio) mensajeVacio.style.display = 'block';
-            actualizarContador();
+            // Mostrar mensaje de vacío
+            const p = document.createElement('p');
+            p.className = 'text-muted';
+            p.textContent = 'Aún no hay servicios registrados.';
+            contenedor.appendChild(p);
             return;
         }
 
-        if (mensajeVacio) mensajeVacio.style.display = 'none';
-
+        // Crear una tarjeta para cada servicio
         servicios.forEach((servicio, index) => {
             const col = document.createElement('div');
             col.className = 'col-md-6 col-lg-4 mb-4';
@@ -135,35 +140,50 @@ document.addEventListener('DOMContentLoaded', function() {
             categoria.className = 'badge bg-secondary me-2';
             categoria.textContent = servicio.categoria;
 
-            const btnEliminar = document.createElement('button');
-            btnEliminar.className = 'btn btn-danger btn-sm mt-2';
-            btnEliminar.textContent = 'Eliminar';
-            btnEliminar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                eliminarServicio(index);
-            });
+            // Si se solicitan botones de eliminar, los añadimos
+            if (mostrarBotones) {
+                const btnEliminar = document.createElement('button');
+                btnEliminar.className = 'btn btn-danger btn-sm mt-2';
+                btnEliminar.textContent = 'Eliminar';
+                btnEliminar.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    eliminarServicio(index);
+                });
+                cardBody.appendChild(btnEliminar);
+            }
 
+            // Ensamblar
             cardBody.appendChild(title);
             cardBody.appendChild(desc);
             cardBody.appendChild(categoria);
             cardBody.appendChild(document.createElement('br'));
-            cardBody.appendChild(btnEliminar);
             card.appendChild(cardBody);
             col.appendChild(card);
-            listaServicios.appendChild(col);
+            contenedor.appendChild(col);
         });
-
-        actualizarContador();
     }
 
+    // ===== Actualizar contador y renderizar ambas vistas =====
+    function actualizarVistas() {
+        // Actualizar contador
+        contadorSpan.textContent = servicios.length;
+
+        // Renderizar en la sección "Servicios" (solo lectura)
+        renderizarServicios(document.getElementById('serviciosGrid'), false);
+
+        // Renderizar en la sección "Gestión" (con botones)
+        renderizarServicios(document.getElementById('listaServicios'), true);
+    }
+
+    // ===== Funciones de manipulación de datos =====
     function agregarServicio(nombre, descripcion, categoria) {
         servicios.push({ nombre, descripcion, categoria });
-        renderizarServicios();
+        actualizarVistas();
     }
 
     function eliminarServicio(index) {
         servicios.splice(index, 1);
-        renderizarServicios();
+        actualizarVistas();
         mensajeValidacion.innerHTML = `<div class="alert alert-info">Servicio eliminado correctamente.</div>`;
         setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
     }
@@ -175,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         servicios = [];
-        renderizarServicios();
+        actualizarVistas();
         mensajeValidacion.innerHTML = `<div class="alert alert-success">Todos los servicios han sido eliminados.</div>`;
         setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
     }
@@ -184,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Re-validar todos los campos por si acaso
+        // Re-validar todos los campos
         const nombreOk = validarNombre();
         const descOk = validarDescripcion();
         const catOk = validarCategoria();
@@ -208,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
         nombreInput.classList.remove('is-valid', 'is-invalid');
         descripcionInput.classList.remove('is-valid', 'is-invalid');
         categoriaSelect.classList.remove('is-valid', 'is-invalid');
-        btnAñadir.disabled = true; // Deshabilitar hasta que se ingresen nuevos datos
+        btnAñadir.disabled = true;
 
         mensajeValidacion.innerHTML = `<div class="alert alert-success">Servicio "${nombre}" añadido correctamente.</div>`;
         setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
@@ -218,7 +238,6 @@ document.addEventListener('DOMContentLoaded', function() {
     btnEliminarTodos.addEventListener('click', eliminarTodos);
 
     // ===== Inicialización =====
-    // Deshabilitar botón al inicio
-    btnAñadir.disabled = true;
-    actualizarContador();
+    btnAñadir.disabled = true; // Comienza deshabilitado
+    actualizarVistas();        // Renderiza los servicios iniciales
 });

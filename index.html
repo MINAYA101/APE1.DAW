@@ -40,6 +40,7 @@
 
     <div class="container my-4">
         <div class="row">
+            <!-- CONTENIDO PRINCIPAL (main) -->
             <main class="col-lg-8">
                 <!-- Sección Inicio -->
                 <section id="inicio" class="p-4 mb-4 bg-light rounded shadow-sm">
@@ -63,74 +64,34 @@
                     </div>
                 </section>
 
-                <!-- Sección Servicios / Productos (estáticos) -->
                 <section id="servicios" class="p-4 mb-4 bg-light rounded shadow-sm">
-                    <h2 class="mb-3">Nuestros Servicios / Productos</h2>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <img src="https://via.placeholder.com/300x200/007bff/ffffff?text=Auditor%C3%ADa+Web" class="card-img-top" alt="Auditoría de Seguridad Web">
-                                <div class="card-body">
-                                    <h5 class="card-title">Auditoría de Seguridad Web</h5>
-                                    <p class="card-text">Análisis exhaustivo de vulnerabilidades en tu sitio web para garantizar la máxima protección.</p>
-                                    <a href="#" class="btn btn-primary">Más Información</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <img src="https://via.placeholder.com/300x200/28a745/ffffff?text=Certificados+SSL" class="card-img-top" alt="Instalación de Certificados SSL">
-                                <div class="card-body">
-                                    <h5 class="card-title">Instalación de Certificados SSL</h5>
-                                    <p class="card-text">Implementación y configuración de certificados HTTPS para cifrar la comunicación de tu sitio.</p>
-                                    <a href="#" class="btn btn-primary">Más Información</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <img src="https://via.placeholder.com/300x200/ffc107/212529?text=Consultor%C3%ADa" class="card-img-top" alt="Consultoría en Ciberseguridad">
-                                <div class="card-body">
-                                    <h5 class="card-title">Consultoría en Ciberseguridad</h5>
-                                    <p class="card-text">Asesoramiento personalizado para mejorar las prácticas de seguridad digital en tu organización.</p>
-                                    <a href="#" class="btn btn-primary">Más Información</a>
-                                </div>
-                            </div>
-                        </div>
+                    <h2 class="mb-3">Nuestros Servicios</h2>
+                    <p class="lead">Conoce nuestra oferta de servicios de seguridad digital.</p>
+                    <!-- Contenedor donde se renderizarán las tarjetas de servicios (solo lectura) -->
+                    <div id="serviciosGrid" class="row">
+                        <!-- Aquí JavaScript inyectará las tarjetas -->
                     </div>
                 </section>
 
-                <!-- SECCIÓN GESTIÓN DE SERVICIOS (mejorada con validaciones dinámicas) -->
                 <section id="gestion" class="p-4 mb-4 bg-light rounded shadow-sm">
                     <h2 class="mb-3"><i class="bi bi-plus-circle"></i> Gestión de Servicios</h2>
                     <p>Registra nuevos servicios. Todos los campos son obligatorios y deben cumplir con los requisitos.</p>
 
-                    <!-- Formulario mejorado con validaciones -->
+                    <!-- Formulario con validaciones -->
                     <form id="formServicio" class="mb-4" novalidate>
                         <div class="row g-3">
-                            <!-- Campo Nombre -->
                             <div class="col-md-4">
                                 <label for="nombreServicio" class="form-label">Nombre del servicio *</label>
                                 <input type="text" class="form-control" id="nombreServicio" placeholder="Ej. Auditoría avanzada" required minlength="3">
-                                <div class="invalid-feedback">
-                                    El nombre debe tener al menos 3 caracteres.
-                                </div>
-                                <div class="valid-feedback">
-                                    ¡Nombre válido!
-                                </div>
+                                <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
+                                <div class="valid-feedback">¡Nombre válido!</div>
                             </div>
-                            <!-- Campo Descripción -->
                             <div class="col-md-4">
                                 <label for="descripcionServicio" class="form-label">Descripción *</label>
                                 <input type="text" class="form-control" id="descripcionServicio" placeholder="Breve descripción" required minlength="10">
-                                <div class="invalid-feedback">
-                                    La descripción debe tener al menos 10 caracteres.
-                                </div>
-                                <div class="valid-feedback">
-                                    Descripción correcta.
-                                </div>
+                                <div class="invalid-feedback">La descripción debe tener al menos 10 caracteres.</div>
+                                <div class="valid-feedback">Descripción correcta.</div>
                             </div>
-                            <!-- Campo Categoría -->
                             <div class="col-md-3">
                                 <label for="categoriaServicio" class="form-label">Categoría *</label>
                                 <select class="form-select" id="categoriaServicio" required>
@@ -140,28 +101,23 @@
                                     <option value="Capacitación">Capacitación</option>
                                     <option value="Herramientas">Herramientas</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    Por favor, selecciona una categoría.
-                                </div>
-                                <div class="valid-feedback">
-                                    Categoría seleccionada.
-                                </div>
+                                <div class="invalid-feedback">Por favor, selecciona una categoría.</div>
+                                <div class="valid-feedback">Categoría seleccionada.</div>
                             </div>
                             <div class="col-md-1 d-flex align-items-end">
                                 <button type="submit" class="btn btn-success w-100" id="btnAñadir">Añadir</button>
                             </div>
                         </div>
-                        <!-- Mensaje de validación general (para errores de formulario) -->
                         <div id="mensajeValidacion" class="mt-3"></div>
                     </form>
 
-                    <!-- Contador y lista de servicios registrados -->
+                    <!-- Contador y lista de servicios (con botones de eliminar) -->
                     <div class="d-flex justify-content-between align-items-center">
                         <h5>Servicios registrados <span id="contadorServicios" class="badge bg-primary">0</span></h5>
                         <button id="btnEliminarTodos" class="btn btn-outline-danger btn-sm">Eliminar todos</button>
                     </div>
                     <div id="listaServicios" class="row mt-3">
-                        <p class="text-muted" id="mensajeVacio">Aún no hay servicios registrados.</p>
+                        <!-- Aquí JavaScript inyectará las tarjetas con botón eliminar -->
                     </div>
                 </section>
 
@@ -192,11 +148,11 @@
 
             <aside class="col-lg-4">
                 <div class="p-4 mb-4 bg-warning bg-opacity-10 rounded shadow-sm">
-                    <h3>Información adicional</h3>
+                    <h3>📢 Información adicional</h3>
                     <p><strong>Horarios de atención:</strong><br>
                     Lunes a Viernes: 9:00 - 18:00<br>
                     Sábados: 9:00 - 13:00</p>
-                    <p><strong>Promoción del mes:</strong><br>
+                    <p><strong>🔥 Promoción del mes:</strong><br>
                     Auditoría básica de seguridad GRATIS para los primeros 10 sitios web que nos contacten. ¡Asegura tu página ahora!</p>
                     <p><strong>Dato curioso:</strong><br>
                     El primer navegador en marcar los sitios HTTP como "No seguro" fue Google Chrome en 2018. Desde entonces, el uso de HTTPS ha crecido más del 70%.</p>
