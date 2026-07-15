@@ -1,13 +1,20 @@
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
 
+    // Simular carga con Spinner
+    const loader = document.getElementById('loader');
+    setTimeout(() => {
+        loader.classList.add('d-none');
+    }, 1500);
+
     // ===== Elementos del DOM =====
     const form = document.getElementById('formServicio');
     const nombreInput = document.getElementById('nombreServicio');
     const descripcionInput = document.getElementById('descripcionServicio');
     const categoriaSelect = document.getElementById('categoriaServicio');
-    const contenedorServicios = document.getElementById('serviciosGrid');   // Para vista de solo lectura
-    const contenedorGestion = document.getElementById('listaServicios');    // Para vista con botones
+    const contenedorServiciosGrid = document.getElementById('serviciosGrid'); // Para tarjetas en sección Servicios
+    const contenedorListaTable = document.getElementById('listaServiciosTable'); // Para tabla en sección Gestión
+    const listaVaciaMsg = document.getElementById('listaServiciosVacia');
     const contadorSpan = document.getElementById('contadorServicios');
     const mensajeValidacion = document.getElementById('mensajeValidacion');
     const btnEliminarTodos = document.getElementById('btnEliminarTodos');
@@ -32,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // ===== Funciones de validación individuales =====
+    // ===== Funciones de validación individuales (Conservando lógica Semana 6) =====
     function validarNombre() {
         const nombre = nombreInput.value.trim();
         const valido = nombre.length >= 3;
@@ -103,115 +110,108 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     categoriaSelect.addEventListener('blur', validarCategoria);
 
-    // ===== Renderizado de servicios (parametrizado) =====
-    function renderizarServicios(contenedor, mostrarBotones = false) {
-        // Limpiar el contenedor
-        contenedor.innerHTML = '';
+    // ===== Renderizado de servicios (Mejorado con Bootstrap Cards y Table) =====
+    function renderizarServicios() {
+        // Limpiar contenedores
+        contenedorServiciosGrid.innerHTML = '';
+        contenedorListaTable.innerHTML = '';
 
         if (servicios.length === 0) {
-            // Mostrar mensaje de vacío
-            const p = document.createElement('p');
-            p.className = 'text-muted';
-            p.textContent = 'Aún no hay servicios registrados.';
-            contenedor.appendChild(p);
-            return;
+            listaVaciaMsg.classList.remove('d-none');
+            contenedorServiciosGrid.innerHTML = '<div class="col-12 text-center text-muted py-4"><p>No hay servicios disponibles.</p></div>';
+        } else {
+            listaVaciaMsg.classList.add('d-none');
         }
 
-        // Crear una tarjeta para cada servicio
         servicios.forEach((servicio, index) => {
+            // 1. Renderizar Tarjetas para la sección "Servicios"
             const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4 mb-4';
+            col.className = 'col-md-6 col-lg-4';
+            col.innerHTML = `
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">${servicio.categoria}</span>
+                            <i class="bi bi-shield-check text-success fs-4"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">${servicio.nombre}</h5>
+                        <p class="card-text text-muted small">${servicio.descripcion}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pb-3">
+                        <button class="btn btn-outline-primary btn-sm w-100" onclick="alert('Detalles de: ${servicio.nombre}')">Ver más</button>
+                    </div>
+                </div>
+            `;
+            contenedorServiciosGrid.appendChild(col);
 
-            const card = document.createElement('div');
-            card.className = 'card h-100 shadow-sm';
-
-            const cardBody = document.createElement('div');
-            cardBody.className = 'card-body';
-
-            const title = document.createElement('h5');
-            title.className = 'card-title';
-            title.textContent = servicio.nombre;
-
-            const desc = document.createElement('p');
-            desc.className = 'card-text';
-            desc.textContent = servicio.descripcion;
-
-            const categoria = document.createElement('span');
-            categoria.className = 'badge bg-secondary me-2';
-            categoria.textContent = servicio.categoria;
-
-            // Si se solicitan botones de eliminar, los añadimos
-            if (mostrarBotones) {
-                const btnEliminar = document.createElement('button');
-                btnEliminar.className = 'btn btn-danger btn-sm mt-2';
-                btnEliminar.textContent = 'Eliminar';
-                btnEliminar.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    eliminarServicio(index);
-                });
-                cardBody.appendChild(btnEliminar);
-            }
-
-            // Ensamblar
-            cardBody.appendChild(title);
-            cardBody.appendChild(desc);
-            cardBody.appendChild(categoria);
-            cardBody.appendChild(document.createElement('br'));
-            card.appendChild(cardBody);
-            col.appendChild(card);
-            contenedor.appendChild(col);
+            // 2. Renderizar Filas para la tabla en la sección "Gestión"
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <div class="fw-bold">${servicio.nombre}</div>
+                    <div class="small text-muted d-none d-md-block">${servicio.descripcion.substring(0, 40)}...</div>
+                </td>
+                <td><span class="badge bg-secondary">${servicio.categoria}</span></td>
+                <td class="text-end">
+                    <button class="btn btn-danger btn-sm" onclick="eliminarServicio(${index})">
+                        <i class="bi bi-trash"></i> <span class="d-none d-md-inline">Eliminar</span>
+                    </button>
+                </td>
+            `;
+            contenedorListaTable.appendChild(tr);
         });
     }
 
-    // ===== Actualizar contador y renderizar ambas vistas =====
+    // ===== Actualizar contador y renderizar =====
     function actualizarVistas() {
-        // Actualizar contador
         contadorSpan.textContent = servicios.length;
-
-        // Renderizar en la sección "Servicios" (solo lectura)
-        renderizarServicios(document.getElementById('serviciosGrid'), false);
-
-        // Renderizar en la sección "Gestión" (con botones)
-        renderizarServicios(document.getElementById('listaServicios'), true);
+        renderizarServicios();
     }
 
-    // ===== Funciones de manipulación de datos =====
-    function agregarServicio(nombre, descripcion, categoria) {
-        servicios.push({ nombre, descripcion, categoria });
-        actualizarVistas();
-    }
-
-    function eliminarServicio(index) {
+    // ===== Funciones de manipulación de datos (Globales para botones dinámicos) =====
+    window.eliminarServicio = function(index) {
+        const nombre = servicios[index].nombre;
         servicios.splice(index, 1);
         actualizarVistas();
-        mensajeValidacion.innerHTML = `<div class="alert alert-info">Servicio eliminado correctamente.</div>`;
-        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
-    }
+        mostrarAlerta(`Servicio "${nombre}" eliminado correctamente.`, 'info');
+    };
 
     function eliminarTodos() {
         if (servicios.length === 0) {
-            mensajeValidacion.innerHTML = `<div class="alert alert-warning">No hay servicios para eliminar.</div>`;
-            setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
+            mostrarAlerta('No hay servicios para eliminar.', 'warning');
             return;
         }
-        servicios = [];
-        actualizarVistas();
-        mensajeValidacion.innerHTML = `<div class="alert alert-success">Todos los servicios han sido eliminados.</div>`;
-        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
+        if (confirm('¿Estás seguro de que deseas eliminar todos los servicios?')) {
+            servicios = [];
+            actualizarVistas();
+            mostrarAlerta('Todos los servicios han sido eliminados.', 'success');
+        }
+    }
+
+    // Función para mostrar alertas de Bootstrap
+    function mostrarAlerta(mensaje, tipo) {
+        mensajeValidacion.innerHTML = `
+            <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                <i class="bi bi-info-circle me-2"></i> ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        // Auto cerrar alerta después de 4 segundos
+        setTimeout(() => {
+            const alert = document.querySelector('#mensajeValidacion .alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
     }
 
     // ===== Evento submit del formulario =====
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Re-validar todos los campos
-        const nombreOk = validarNombre();
-        const descOk = validarDescripcion();
-        const catOk = validarCategoria();
-        const todoOk = nombreOk && descOk && catOk;
-
-        if (!todoOk) {
-            mensajeValidacion.innerHTML = `<div class="alert alert-danger">Corrige los campos marcados en rojo antes de añadir.</div>`;
+        if (!validarFormularioCompleto()) {
+            mostrarAlerta('Por favor, corrige los campos marcados antes de continuar.', 'danger');
             return;
         }
 
@@ -219,25 +219,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const descripcion = descripcionInput.value.trim();
         const categoria = categoriaSelect.value;
 
-        agregarServicio(nombre, descripcion, categoria);
-
-        // Limpiar campos y quitar clases de validación
-        nombreInput.value = '';
-        descripcionInput.value = '';
-        categoriaSelect.value = '';
-        nombreInput.classList.remove('is-valid', 'is-invalid');
-        descripcionInput.classList.remove('is-valid', 'is-invalid');
-        categoriaSelect.classList.remove('is-valid', 'is-invalid');
+        // Simular proceso de carga con el botón
         btnAñadir.disabled = true;
+        btnAñadir.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Añadiendo...';
 
-        mensajeValidacion.innerHTML = `<div class="alert alert-success">Servicio "${nombre}" añadido correctamente.</div>`;
-        setTimeout(() => mensajeValidacion.innerHTML = '', 3000);
+        setTimeout(() => {
+            servicios.push({ nombre, descripcion, categoria });
+            actualizarVistas();
+
+            // Limpiar campos
+            form.reset();
+            nombreInput.classList.remove('is-valid');
+            descripcionInput.classList.remove('is-valid');
+            categoriaSelect.classList.remove('is-valid');
+            
+            // Restaurar botón
+            btnAñadir.innerHTML = '<i class="bi bi-plus-lg me-2"></i>Añadir Servicio';
+            btnAñadir.disabled = true;
+
+            mostrarAlerta(`¡Servicio "${nombre}" añadido con éxito!`, 'success');
+        }, 1000);
     });
 
     // ===== Evento para eliminar todos =====
     btnEliminarTodos.addEventListener('click', eliminarTodos);
 
     // ===== Inicialización =====
-    btnAñadir.disabled = true; // Comienza deshabilitado
-    actualizarVistas();        // Renderiza los servicios iniciales
+    btnAñadir.disabled = true;
+    actualizarVistas();
 });
